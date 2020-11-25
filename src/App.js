@@ -1,16 +1,21 @@
 import React from 'react'; 
 import axios from 'axios'
 import {fetchUser} from './api/index'
+
 class App extends React.Component {
 
     state = {user: null}
 
+    handleFetch = () => {
+        fetch(`https://jsonplaceholder.typicode.com/users/1`) 
+        .then(resp => resp.json())
+        .then(data => this.setState({user: data}))
+        .catch(err => new Error(err))
+    }
+
 
     componentDidMount() {
-       axios.get(`https://jsonplaceholder.typicode.com/users/1`) 
-       .then(resp => resp.json())
-       .then(data => this.setState({user: data}))
-       .catch(err => new Error(err))
+        this.handleFetch()
      }
 
     render() {
@@ -22,7 +27,7 @@ class App extends React.Component {
         )
         : (
             <div>
-        <h4 className='header'>{this.state.user.name}</h4>
+        <h4 className='header' data-test='user-name'>{this.state.user.name}</h4>
         
             </div>
         )
