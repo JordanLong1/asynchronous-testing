@@ -2,8 +2,7 @@ import React from 'react';
 // import App from './App';
 import App from './App.js'
 import {shallow} from 'enzyme';
-import fetchMock from 'fetch-mock'
-import moxios from 'moxios'
+import {handleFetch} from './App'
 
 const nextTick = async () => {
   return new Promise(resolve => {
@@ -17,18 +16,19 @@ const dummyUser = {
   website: 'https::javascriptplayground.com'
 }
 
+ const runAllPromises = () => new Promise(setImmediate)
+
+
 describe('App component', () => {
   let wrapper;
 
   beforeEach(() => {
     wrapper = shallow(<App />)
-    moxios.install()
 
   })
 
   afterEach(() => {
     // wrapper.unmount();
-    moxios.uninstall();
   })
 
   test('component renders without an error', () => {
@@ -42,21 +42,20 @@ describe('App component', () => {
   })
 
   test('h4 contains users name from fetch', async () => {
-  const usersName = dummyUser.name
-
-  moxios.wait(() => {
-    const request = moxios.requests.mostRecent(); 
-    request.respondWith({
-      status: 200, 
-      response: usersName
-    })
-  })
-  return wrapper.instance()
-  .then(() => {
-    const oldState = wrapper.state()
-    expect(oldState.user).toBe(usersName)
-  })
    
+    const mockCall = jest.fn(); 
+    console.log(mockCall)
+    const component = wrapper.find('[data-testid="user-name"]'); 
+
+
+
+    expect(mockCall).toHaveBeenCalled(); 
+
+    await runAllPromises() 
+
+    wrapper.update(); 
+    expect(component).toHaveLength(1)
   })
 
 })
+
