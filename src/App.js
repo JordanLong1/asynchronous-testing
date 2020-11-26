@@ -9,7 +9,7 @@ class App extends React.Component {
     handleFetch = () => {
         fetch(`https://jsonplaceholder.typicode.com/users/1`) 
         .then(resp => resp.json())
-        .then(data => this.setState({user: data}))
+        .then(data => this.setState({user: data.name}))
         .catch(err => new Error(err))
     }
 
@@ -27,7 +27,7 @@ class App extends React.Component {
         )
         : (
             <div>
-        <h4 className='header' data-test='user-name'>{this.state.user.name}</h4>
+        <h4 className='header' data-test='user-name'>{this.state.user}</h4>
         
             </div>
         )
